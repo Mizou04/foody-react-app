@@ -1,5 +1,5 @@
 import {Box, Card, CardContent, CardMedia, Input, Typography, Chip, Select, MenuItem, FormControl, FormHelperText, CircularProgress } from "@material-ui/core";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState, createRef, useCallback } from "react";
 import {MainControllerContext} from "../../controllers/main.controller";
 import useStyles from './style'
 import MealCard from "../components/mealCard/MealCard.jsx" 
@@ -8,11 +8,14 @@ import { orange } from "@material-ui/core/colors";
 export default function AppContainer(){
     let classes = useStyles();
     let { mealsList, isloading, mealsIngredients, setLetterIndex, letterIndex} = useContext(MainControllerContext);
-    let mealCardRef = useRef(null);
-    // mealsList = [{idMeal : 123, strMeal : "tagine", strTags : "lamb,couscous", strCategory:"traditional"}]
+    let observedRef = useRef();
+    let observer = useRef();
+
     let categories = [{category : "xxx"}];
     let areas = [{area : "canada"}];
     let mainIngredients = [{mainIngredient : "lamb"}];
+    
+    let [mealsLoader, setMealsLoader] = useState(false);
 
     let [action, setAction] = useState({category : "", area : "", mainIngredient : ""})
 
@@ -26,32 +29,43 @@ export default function AppContainer(){
         return <MenuItem key={mainIngredient} value={mainIngredient}>{mainIngredient}</MenuItem>
     })
 
-    let mealsListPresentation = mealsList?.map((mealsObj)=>{
-        return  (
-                <li style={{margin : "10px 0px"}}><MealCard ref={mealCardRef} mealsList={mealsObj}/></li>
-        )
+    let mealsListPresentation = mealsList?.map((mealsObj, i)=>{
+        if(i === mealsList.length - 2){
+                return <li key={mealsObj.idMeal} ref={observedRef}  style={{background : "red",margin : "10px 0px"}}>
+                        <MealCard mealsList={mealsObj}/>
+                       </li>
+        };
+        return <li key={mealsObj.idMeal}  style={{margin : "10px 0px"}}>
+                    <MealCard mealsList={mealsObj}/>
+                </li>
     });
 
     const changeHandler = e =>{
         setAction({...action, [e.target.name] : e.target.value});
     }
-
-    const scrollHandler = (e)=>{
-        console.log(e.target.scrollTop, (mealsList.length - 1) * (500 - 14))
-        if(letterIndex < 26){
-            if(e.target.scrollTop >= (mealsList.length - 1) * (500 - 14)){
-                setLetterIndex( 
-                    // setTimeout(()=>{
-                        prevIndex => prevIndex + 1
-                    // }, 1000 * (mealsList.length -1)) 
-                    );
-            }
-        }
-    }
     
+    
+    useEffect(()=>{
+        function observerHandler(entries){
+            if(entries[0].isIntersecting){
+                let number = letterIndex + 1;
+                setMealsLoader(true);
+                setLetterIndex(number);
+            }
+    }
+        async function observe(){
+            observer.current = await new IntersectionObserver(observerHandler, {root:null, rootMargin:"0px", threshold:1});
+            if(observedRef.current){
+                observer.current.observe(observedRef.current);
+            };
+        }
+        observe();
+    }, [mealsList])
+
+
     return (
         <div style={{width : "100vw", height : "100%",display : "flex", justifyContent : "center", alignItems : "center"}}>
-        {isloading ? <CircularProgress color={orange[300]} /> :
+        {isloading ? <CircularProgress color='primary' /> :
             <Box className={classes.body}>
                 <Box className={classes.actions}>
                     <div className={classes.actionsContainer}>
@@ -72,8 +86,11 @@ export default function AppContainer(){
                         </FormControl>
                     </div>
                 </Box>
-                <Box  onScroll={scrollHandler} className={classes.mealsList}>
-                    <ul>{mealsListPresentation}</ul>
+                <Box className={classes.mealsList}>
+                    <ul className={classes.ul}>{mealsListPresentation}</ul>
+                    {mealsLoader && <div style={{height : "100px", width:"100%",display : "flex", justifyContent: "center"}}>
+                        <span><CircularProgress color="primary"/></span>
+                    </div>}
                 </Box>
             </Box>
               

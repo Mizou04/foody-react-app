@@ -7,6 +7,7 @@ export let MainControllerContext = createContext("");
 export default function MainController({children}){
     let letters = "abcdefghijklmnopqrstuvwxyz";
 
+    // let [mealsList, setMealsList] = useState([{strMeal : "1"},{strMeal : "2"},{strMeal : "1"},{strMeal : "1"},{strMeal : "1"},{strMeal : "1"},{strMeal : "1"}]);
     let [mealsList, setMealsList] = useState([]);
     let [isloading, setIsloading] = useState(true);
     let [letterIndex, setLetterIndex] = useState(0);

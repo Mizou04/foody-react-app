@@ -42,5 +42,8 @@ export default makeStyles(theme => ({
         flexDirection : "column",
         overflow : "scroll",
         paddingTop : "0px"
+    },
+    ul : {
+        listStyle : "none",
     }
 }))
