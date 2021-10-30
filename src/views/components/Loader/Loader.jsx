@@ -7,7 +7,7 @@ export default function({}){
     let classes = useStyles();
 
     return(
-        <Box className={classes.loaderContainer} key={idMeal} elevation={1} component={Paper}>
+        <Box className={classes.loaderContainer} elevation={1}>
             <CircularProgress color="secondary"/>
         </Box>)
 }

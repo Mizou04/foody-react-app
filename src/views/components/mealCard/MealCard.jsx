@@ -1,10 +1,10 @@
 import { Box, Card, CardContent, CardMedia, Input, Typography, Chip, Paper } from "@material-ui/core";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, memo } from "react";
 import { MainControllerContext } from "../../../controllers/main.controller";
 import useStyles from "./style"
 
 
-export default function({mealsList}){
+function MealCard({mealsList}){
     let classes = useStyles();
     let { isloading, mealsIngredients } = useContext(MainControllerContext);
     let {strMeal, strMealThumb, idMeal, strCategory, strTags, strArea} = mealsList;
@@ -14,7 +14,7 @@ export default function({mealsList}){
         if(mealsList[ingredient] !== null && mealsList[ingredient] !== ""){
             return ingredient
         }}).map((ingredient, i)=>{
-        return <Typography component="p" variant="subtitle2" classList={classes.ingredientStr} key={i}>{i + 1}- {mealsList[ingredient]}</Typography>
+        return <Typography component="p" variant="subtitle2" className={classes.ingredientStr} key={i}>{i + 1}- {mealsList[ingredient]}</Typography>
     })
 
     return(
@@ -33,3 +33,5 @@ export default function({mealsList}){
             </Card>       
         )
 }
+
+export default memo(MealCard)

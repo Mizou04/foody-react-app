@@ -7,8 +7,9 @@ export let MainControllerContext = createContext("");
 export default function MainController({children}){
     let letters = "abcdefghijklmnopqrstuvwxyz";
 
-    // let [mealsList, setMealsList] = useState([{strMeal : "1"},{strMeal : "2"},{strMeal : "1"},{strMeal : "1"},{strMeal : "1"},{strMeal : "1"},{strMeal : "1"}]);
     let [mealsList, setMealsList] = useState([]);
+    let [mealByDetail, setMealByDetail] = useState(null);
+
     let [isloading, setIsloading] = useState(true);
     let [letterIndex, setLetterIndex] = useState(0);
 
@@ -18,29 +19,26 @@ export default function MainController({children}){
         setIsloading(false);
     }
 
+    const getMealById = async (id) =>{
+        setIsloading(true);
+        let meal = await foodModel.getMealDetailsById(id);
+        setMealByDetail(meal.meals);
+        setIsloading(false);
+    }
+
     const makeMealsList = useCallback((letter)=>{
         return getMealsList(letter);
 
-    }, [getMealsList])
-
-    const mealsIngredients = new Array(20).fill("strIngredient").map((str, num)=>{
-        return str + Number(num+1);
-    });
-    
-    const getMoreMeals =()=>{
-        makeMealsList(letters.charAt(letterIndex))
-    }
+    }, [])
     
     useEffect(()=>{
-        getMoreMeals();
+        // makeMealsList(letters.charAt(letterIndex))
     }, [letterIndex])
 
-
-
-
+   
     return (
-        <MainControllerContext.Provider value={{mealsList, isloading, mealsIngredients, setLetterIndex, letterIndex}}>
-            <AppContainer />
+        <MainControllerContext.Provider value={{mealsList, isloading, setLetterIndex, letterIndex, getMealById}}>
+                <AppContainer />
         </MainControllerContext.Provider>
     )
     // return cloneElement(children, {
