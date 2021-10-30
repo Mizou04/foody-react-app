@@ -31,13 +31,13 @@ export default makeStyles(theme => ({
     ingredientsDiv : {
         display : "grid",
         // padding : "20px 30px",
-        height : "70%",
+        Height : "70%",
         width : "100%",
         gridTemplateColumns : "1fr 1fr",
     },
     ingredientStr : {
         display : "block",
-        fontSize : "4em",
+        fontSize : "1.2em",
 
     }
     ,
