@@ -1,3 +1,11 @@
+<<<<<<< HEAD
 node_modules/*
 node_modules/.cache
 babel-loader/*
+=======
+node_modules
+../node_modules
+
+tst.js
+node_modules
+>>>>>>> mealDetailsPage

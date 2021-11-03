@@ -8,10 +8,14 @@ import Loader from "../components/Loader/Loader"
 import { Route, Switch } from "react-router";
 import {grey } from "@material-ui/core/colors";
 import {ArrowBack} from "@material-ui/icons"
+import MealDetailsPage from "../MealDetailsPage/MealDetailsPage"
+import { MealByIDContext } from "../../controllers/mealById.controller";
 
 function AppContainer(){
     let classes = useStyles();
-    let { mealsList, isloading, setLetterIndex, letterIndex, getMealById} = useContext(MainControllerContext);
+    let { mealsList, isloading, setLetterIndex, letterIndex} = useContext(MainControllerContext);
+    let {getMealById} = useContext(MealByIDContext);
+
     let observedRef = useRef();
     let [mealsLoader, setMealsLoader] = useState(false);
 
@@ -27,7 +31,7 @@ function AppContainer(){
                 </li>
     });
 
-    const clickHandler = e =>{
+    const getMealDetailsHandler = e =>{
         getMealById(e.target.id)
     }
     
@@ -53,25 +57,25 @@ function AppContainer(){
     return (
         <div style={{width : "100vw", height : "100%",display : "flex", justifyContent : "center", alignItems : "center"}}>
         {/* {isloading ? <Loader/> : */}
-            <Box className={classes.body}>
-                <Button startIcon={<ArrowBack color="primary"/>}></Button>
-                <Switch>
-                    <Route exact path='/'>
+            {/* <Box className={classes.body}> */}
+                {/* <Button startIcon={<ArrowBack color="primary"/>}></Button> */}
+                {/* <Switch> */}
+                    {/* <Route exact path='/'> */}
                         {/* {history.pushState()} */}
-                        <Filters/>
+                        {/* <Filters/> */}
                         {/* <Box className={classes.mealsList}>
                             <ul className={classes.ul}>{mealsListPresentation}</ul>
                             {mealsLoader && <div style={{height : "100px", width:"100%",display : "flex", justifyContent: "center"}}>
                                 <span><CircularProgress color="primary"/></span>
                             </div>}
                         </Box> */}
-                    </Route>
+                    {/* </Route> */}
                     {/* <Route path="/:id">
                         {history.pushState("", "", new URL("/"))}
                     </Route> */}
-                </Switch>
-            </Box>
-              
+                {/* </Switch> */}
+            {/* </Box> */}
+            <MealDetailsPage/>
         
         </div>
     )
