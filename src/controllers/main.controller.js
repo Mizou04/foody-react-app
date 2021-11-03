@@ -1,14 +1,14 @@
-import { useState, useEffect, cloneElement, createContext, useCallback, useMemo } from "react";
-import foodModel from "../models/fetch.model";
+import { useState, useEffect, cloneElement, createContext, useCallback, useMemo, useContext } from "react";
+import { FoodModelContext } from "../App";
 import AppContainer from "../views/AppContainer/AppContainer";
+import MealByIDController from "./mealById.controller";
 
 export let MainControllerContext = createContext("");
 
-export default function MainController({children}){
+export default function MainController({children}){ // for getting meals list
     let letters = "abcdefghijklmnopqrstuvwxyz";
-
+    let foodModel = useContext(FoodModelContext)
     let [mealsList, setMealsList] = useState([]);
-    let [mealByDetail, setMealByDetail] = useState(null);
 
     let [isloading, setIsloading] = useState(true);
     let [letterIndex, setLetterIndex] = useState(0);
@@ -19,12 +19,6 @@ export default function MainController({children}){
         setIsloading(false);
     }
 
-    const getMealById = async (id) =>{
-        setIsloading(true);
-        let meal = await foodModel.getMealDetailsById(id);
-        setMealByDetail(meal.meals);
-        setIsloading(false);
-    }
 
     const makeMealsList = useCallback((letter)=>{
         return getMealsList(letter);
@@ -37,8 +31,8 @@ export default function MainController({children}){
 
    
     return (
-        <MainControllerContext.Provider value={{mealsList, isloading, setLetterIndex, letterIndex, getMealById}}>
-                <AppContainer />
+        <MainControllerContext.Provider value={{mealsList, isloading, setLetterIndex, letterIndex}}>
+            {children}
         </MainControllerContext.Provider>
     )
     // return cloneElement(children, {
