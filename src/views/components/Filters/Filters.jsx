@@ -41,9 +41,6 @@ function Filters({}){
     // function changeCriteriaHandler(e){
     // }
 
-    useEffect(()=>{
-        console.log(criteria);
-    }, [criteria]);
 
     return (
         <Box className={classes.actions} component={Paper} elevation="2">

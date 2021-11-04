@@ -7,15 +7,8 @@ export let MainControllerContext = createContext("");
 
 export default function MainController({children}){ // for getting meals list
     let letters = "abcdefghijklmnopqrstuvwxyz";
-<<<<<<< HEAD
-
-    let [mealsList, setMealsList] = useState([]);
-    let [mealByDetail, setMealByDetail] = useState(null);
-=======
-    let foodModel = useContext(FoodModelContext)
-    let [mealsList, setMealsList] = useState([]);
->>>>>>> mealDetailsPage
-
+    let {foodModel} = useContext(FoodModelContext)
+    const [mealsList, setMealsList] = useState([]);
     let [isloading, setIsloading] = useState(true);
     let [letterIndex, setLetterIndex] = useState(0);
 
@@ -24,35 +17,21 @@ export default function MainController({children}){ // for getting meals list
         setMealsList([...mealsList, ...list.meals]);
         setIsloading(false);
     }
-
-<<<<<<< HEAD
-    const getMealById = async (id) =>{
-        setIsloading(true);
-        let meal = await foodModel.getMealDetailsById(id);
-        setMealByDetail(meal.meals);
-        setIsloading(false);
-    }
-=======
->>>>>>> mealDetailsPage
-
     const makeMealsList = useCallback((letter)=>{
-        return getMealsList(letter);
+            return getMealsList(letter);
+    }, [mealsList])
 
-    }, [])
-    
     useEffect(()=>{
-        // makeMealsList(letters.charAt(letterIndex))
+        makeMealsList(letters.charAt(letterIndex));
     }, [letterIndex])
+    
+    const mealsIngredients= ["strIngredient1","strIngredient2","strIngredient3","strIngredient4","strIngredient5","strIngredient6","strIngredient7","strIngredient8","strIngredient9","strIngredient10","strIngredient11","strIngredient12","strIngredient13","strIngredient14","strIngredient15","strIngredient16","strIngredient17","strIngredient18","strIngredient19","strIngredient20"]
+    
 
    
     return (
-<<<<<<< HEAD
-        <MainControllerContext.Provider value={{mealsList, isloading, setLetterIndex, letterIndex, getMealById}}>
-                <AppContainer />
-=======
-        <MainControllerContext.Provider value={{mealsList, isloading, setLetterIndex, letterIndex}}>
+        <MainControllerContext.Provider value={{mealsList, isloading, setLetterIndex, letterIndex, mealsIngredients}}>
             {children}
->>>>>>> mealDetailsPage
         </MainControllerContext.Provider>
     )
     // return cloneElement(children, {

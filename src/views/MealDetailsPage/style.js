@@ -5,7 +5,9 @@ export default makeStyles((theme)=>({
     mealPage : {
         height : '100%',
         width : "90%",
-        background : grey[50]
+        background : grey[50],
+        margin : "auto",
+        marginTop : "10px",
     },
     mealMedia : {
         height : "35%",
@@ -23,8 +25,26 @@ export default makeStyles((theme)=>({
         alignItems : "center"
     },
     img : {
-        width : "90%",
+        width : "80%",
         height : "100%",
+    },
+    previewContainer :{
+        width : "100%",
+        height : "100%",
+        top : 0,
+        left : 0,
+        position : "absolute",
+        zIndex : 3000000,
+        margin : "auto",
+        paddingTop : "30px",
+    },
+    preview : {
+        width : '80%',
+        height : "90%",
+        // position : "absolute",
+        margin : "auto",
+        top : "20px",
+        padding : "5px"
     },
     videoContainer : {
         width : "50%",
