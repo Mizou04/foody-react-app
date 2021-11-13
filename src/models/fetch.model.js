@@ -1,12 +1,16 @@
 const url = "https://www.themealdb.com/api/json/v1/1";
 
 export class ModelInterface{
+    /**
+     * @param {string} url
+     */
     constructor(url){
         this.url = url;
         this._data = {};
         this._controller = undefined;
     }
     subscribe(controller){}
+    httpClient({url, file, queryParam}){}
 }
 
 export class Model extends ModelInterface{
@@ -16,6 +20,7 @@ export class Model extends ModelInterface{
             mealsByFirstLetter : {}, //object 
             mealByName : {}, //object 
             mealDetailById : {}, //object
+            mealByCriteria : {}, //object
         };
     }
     
@@ -79,6 +84,32 @@ export class Model extends ModelInterface{
         this._data.mealDetailById = {...response}; //store response in (this._data : Array)
         
         return this._data.mealDetailById;
+    }
+
+    async getMealsByCriteria(filter, value){
+        const file = "/filter.php";
+        let query;
+        switch(filter){
+            case "categorie" : 
+                query = "c";
+                break;
+            case "area" : 
+                query = "a";
+                break;
+            case "ingredient" : 
+                query = "i";
+                break;
+        }
+        let queryParam = `?${query}=${value}`;
+        if(this._data.mealByCriteria?.meals?.every(meal=> meal["strArea" || 'strCategory'] === value)){
+            return this._data.mealByCriteria;
+        };
+
+        let response = await this.httpClient({url : this.url, file : file, queryParam : queryParam});
+
+        this._data.mealByCriteria = {...response}; //store response in (this._data : Array)
+        
+        return this._data.mealByCriteria;
     }
 
     

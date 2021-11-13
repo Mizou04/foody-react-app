@@ -9,12 +9,12 @@ export default function MealByIDController({children}){
     let {foodModel} = useContext(FoodModelContext)
     let [mealById, setMealById] = useState([]);
     
-    const getMealById = async (id) =>{
+    const getMealById = useCallback(async (id) =>{
         // setIsloading(true);
         let meal = await foodModel.getMealDetailsById(id);
         setMealById(meal?.meals);
         // setIsloading(false);
-    };
+    }, [foodModel]);
 
     
     return <MealByIDContext.Provider value={{getMealById, mealById}}>
