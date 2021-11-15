@@ -12,7 +12,7 @@ export default function MealByCriteriaController({children}){ // for filtering m
 
     const getMealsByCriteria = useCallback(async (criteria, value)=>{
         const response = await foodModel.getMealsByCriteria(criteria, value);
-        setFilteredMeals([...filteredMeals, ...response.meals])
+        setFilteredMeals(response.meals)
     }, [foodModel])
 
 

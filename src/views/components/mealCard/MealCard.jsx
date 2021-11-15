@@ -32,7 +32,7 @@ const MealCard = ({mealsList})=> {
                     <CardContent className={classes.mealTags}>
                         {strTags?.split(",").map(el=> <Chip key={el} className={classes.mealTag} onClick={()=>{}} label={el}/>)}
                     </CardContent>
-                    <RouterLink to={{pathname : `/meal/${idMeal}`, state : {idMeal}}}>
+                    <RouterLink to={{pathname : `/meal/${idMeal}`, state : {idMeal : idMeal}}}>
                         meal details 
                     </RouterLink>
                 </CardContent>

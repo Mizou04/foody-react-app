@@ -1,17 +1,18 @@
 import { Box, Grid, Paper, Card, Typography, Button, CardMedia, ButtonBase, IconButton, CircularProgress } from "@material-ui/core";
 import { ShareOutlined, HowToReg, ListAltOutlined, HelpOutlined, HelpOutlineOutlined, LiveHelp, Facebook, Twitter, WhatsApp } from "@material-ui/icons";
 import useStyles from "./style"
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef, useContext, memo } from "react";
 import { cyan, green, lightGreen } from "@material-ui/core/colors";
 import { useParams, useHistory, Route, useLocation } from "react-router";
+import { MealByIDContext } from "../../controllers/mealById.controller";
 
 // const CustomButton = 
 
-export default function MealDetails({}){
-    let location = useLocation().state
-    
-    let {mealById, setMealById, id} = location;
-    setMealById = JSON.parse(setMealById)
+export default memo(function MealDetails({}){
+    let location = useLocation();
+    let {idMeal} = useParams();
+    let {getMealById, mealById} = useContext(MealByIDContext)
+    // let {idMeal} = location.state;
     
     let classes = useStyles();
     let [content, setContent] = useState("description");
@@ -31,25 +32,24 @@ export default function MealDetails({}){
   
 
     useEffect(()=>{
-        setMealById(id);
-        return ()=>{
-            mealById = 0;
-        }
-    }, [])
+        console.log(mealById)
+        console.log(idMeal)
+        getMealById(idMeal);
+    }, [idMeal])
 
 
     let mealDetailsPresenter = ()=>{
         switch (content){
             case "description": 
             return <Box style={{width : "84%", height : "100%", padding:'20px'}}>
-                        <Typography variant="h4">{mealById?.strMeal}</Typography>
-                        <Typography variant="subtitle2">{mealById?.strArea} {mealById?.strCategory}</Typography>
+                        <Typography variant="h4">{mealById[0]?.strMeal}</Typography>
+                        <Typography variant="subtitle2">{mealById[0]?.strArea} {mealById[0]?.strCategory}</Typography>
                         <Typography style={{lineHeight: "2em", textIndent:"20px", marginTop:"30px"}}>{dataIsReady() && "lorem ipsilum"}</Typography>
                     </Box>
             case "instructions": 
             return  <Box style={{width : "84%", height : "100%", padding:'20px'}}>
                         <Typography variant="h4">Instructions</Typography>
-                        <Typography style={{lineHeight: "2em", textIndent:"20px", marginTop : "30px"}}>{dataIsReady() && mealById?.strInstructions}</Typography>
+                        <Typography style={{lineHeight: "2em", textIndent:"20px", marginTop : "30px"}}>{dataIsReady() && mealById[0]?.strInstructions}</Typography>
                     </Box>
             case "share" :
             return  <Box style={{width : "84%", height : "100%", padding:'20px'}}>
@@ -65,17 +65,17 @@ export default function MealDetails({}){
         }
     
 
-
     return (
-        <Box component={Paper} className={classes.mealPage} component={Paper} elevation={4} >
+        
+        dataIsReady() && <Box component={Paper} className={classes.mealPage} component={Paper} elevation={4} >
                 
                 <Box className={classes.mealMedia}>
                     <div className={classes.imgContainer}>
-                        <img className={classes.img} onClick={()=>{setPreview(true)}} src={dataIsReady && mealById?.strMealThumb} /*style={{cursor : "pointer",background : "url("+mealData?.strMealThumb+") no-repeat" , backgroundPoisition : "top", backgroundSize : "cover",  }}*/ />
+                        <img className={classes.img} onClick={()=>{setPreview(true)}} src={dataIsReady && mealById[0]?.strMealThumb} /*style={{cursor : "pointer",background : "url("+mealData?.strMealThumb+") no-repeat" , backgroundPoisition : "top", backgroundSize : "cover",  }}*/ />
                     </div>
-                    {preview &&<div onClick={clickHandler} id="previewContainer" className={classes.previewContainer}><Card className={classes.preview}><CardMedia style={{width : "100%", height : "100%"}} image={mealById?.strMealThumb}/><button style={{color : "white", zIndex : "40000000",position : "relative", top : "10px", right : "10px"} } onClick={()=>{setPreview(false)}}>x</button></Card></div>}
+                    {preview &&<div onClick={clickHandler} id="previewContainer" className={classes.previewContainer}><Card className={classes.preview}><CardMedia style={{width : "100%", height : "100%"}} image={mealById[0]?.strMealThumb}/><button style={{color : "white", zIndex : "40000000",position : "relative", top : "10px", right : "10px"} } onClick={()=>{setPreview(false)}}>x</button></Card></div>}
                     <div className={classes.videoContainer}>
-                        <video  className={classes.video} width='360' /*src={ mealData?.strYoutube}*/ height="260" controls/>
+                        <iframe  className={classes.video} src={mealById[0]?.strYoutube.replace("/watch?v=", "/embed/")} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title="Embedded youtube"/>
                     </div>
                 </Box>
                  <Box className={classes.mealDetails}  component={Paper} elevation={1} >
@@ -95,4 +95,4 @@ export default function MealDetails({}){
 
         </Box>
         )
-}
+})

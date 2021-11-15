@@ -17,10 +17,10 @@ const FilteredList = ({mealsLoader, setMealsLoader}) => {
     }, [location])
     
     useEffect(()=>{
-        // setMealsLoader(true);
+        setMealsLoader(true);
         getMealsByCriteria(filter, value)
-        // setMealsLoader(false);
-    }, [])
+        setMealsLoader(false);
+    }, [value])
 
     
     let mealsListPresentation = filteredMeals?.map((mealsObj, i)=>{
@@ -33,7 +33,7 @@ const FilteredList = ({mealsLoader, setMealsLoader}) => {
     return (
         <Box className={classes.mealsList}>
             <ul className={classes.ul}>{mealsListPresentation}</ul>
-            {
+            {mealsLoader &&
                 <div  style={{height : "100px", width:"100%",display : "flex", justifyContent: "center"}}>
                  <span><CircularProgress color="primary"/></span>
                 </div>

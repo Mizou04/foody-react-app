@@ -31,9 +31,6 @@ function Filters(){
         }
     }
 
-    useEffect(()=>{
-        console.log(filter, criteria)
-    }, [filter, criteria])
 
     function changeHandler(e){
         setCriteria("");

@@ -15,8 +15,7 @@ import Error404 from "../components/404/404";
 
 function AppContainer(){
     let classes = useStyles();
-    let { mealsList, setMealsList, isloading, setLetterIndex, letterIndex} = useContext(MainControllerContext);
-    // let {getMealsByCriteria, filteredMeals} = useContext(MealByCriteriaContext);
+    let {isloading} = useContext(MainControllerContext);
     let [mealsLoader, setMealsLoader] = useState(true);
     let history = useHistory();
     
@@ -31,7 +30,7 @@ function AppContainer(){
                         </>
                         }
                     </Route>
-                    <Route path={`meal/:id`}>
+                    <Route path="/meal/:idMeal">
                         {/* <RouterLink to="/"> */}
                             <Button onClick={()=>history.goBack()} style={{position : "absolute", left : "10px", top : "10px"}} startIcon={<ArrowBack color="primary"/>}/>
                         {/* </RouterLink> */}
@@ -41,7 +40,7 @@ function AppContainer(){
                         {isloading ? <Loader/> :
                             <>
                             {/* <RouterLink to="/"> */}
-                                <Button onClick={()=>history.replace("/")} style={{position : "absolute", left : "10px", top : "10px"}} startIcon={<ArrowBack color="primary"/>}/>
+                                <Button onClick={()=>history.goBack()} style={{position : "absolute", left : "10px", top : "10px"}} startIcon={<ArrowBack color="primary"/>}/>
                             {/* </RouterLink> */}
                             <Filters />
                             <FilteredList  mealsLoader={mealsLoader} setMealsLoader={setMealsLoader}/>
